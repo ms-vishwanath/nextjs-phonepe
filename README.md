@@ -1,42 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📄 Environment Variables Documentation for PhonePe Integration
 
-## Getting Started
+This document explains the environment variables required to configure the PhonePe payment gateway integration in your Next.js application.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Environment Variables
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### `PHONEPE_MERCHANT_ID`
+- **Description:**  
+  The unique identifier assigned to your merchant account by PhonePe.  
+- **Purpose:**  
+  Used to identify your account when making API calls to PhonePe.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### `PHONEPE_SALT_KEY`
+- **Description:**  
+  A secret cryptographic key provided by PhonePe.  
+- **Purpose:**  
+  Used to generate and verify checksums for secure communication between your server and PhonePe APIs.  
+- **Security:**  
+  Must be kept confidential and never exposed to client-side code.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+### `PHONEPE_KEY_INDEX`
+- **Description:**  
+  The index number corresponding to the salt key being used.  
+- **Purpose:**  
+  Sent along with API requests to specify which salt key is used for checksum generation.  
+- **Typical Value:**  
+  Usually set to `1`. PhonePe may provide additional keys for rotation.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### `API_URL`
+- **Description:**  
+  The base URL for PhonePe API endpoints.  
+- **Purpose:**  
+  Directs your server to communicate with either PhonePe’s sandbox environment for testing or the live production environment.  
+- **Example:**  
+  Sandbox URL is usually `https://api-preprod.phonepe.com/apis/pg-sandbox`.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### `PHONEPE_CHECKOUT_URL`
+- **Description:**  
+  The full URL endpoint used to initiate payment requests with PhonePe.  
+- **Purpose:**  
+  Your backend calls this URL to generate payment tokens and redirect users to PhonePe’s payment UI.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-"# phone-pe-next-js" 
-"# phonpe-nextjs" 
-"# phonpe-nextjs" 
-"# phonpe-nextjs" 
-"# phonpe-nextjs" 
-"# nextjs-phonepe" 
+---
+
+### `PHONEPE_STATUS_URL`
+- **Description:**  
+  The API endpoint to check the status of a payment transaction.  
+- **Purpose:**  
+  Used by your backend to query PhonePe and verify if a payment was successful, pending, or failed.
+
+---
+
+### `PAYMENT_SUCCESS_URL`
+- **Description:**  
+  The URL on your frontend where users will be redirected after a successful payment.  
+- **Purpose:**  
+  To provide confirmation and next steps once payment completes.
+
+---
+
+### `PAYMENT_FAILURE_URL`
+- **Description:**  
+  The URL on your frontend where users will be redirected if the payment fails or is cancelled.  
+- **Purpose:**  
+  To inform users about payment failure and offer retry or support options.
+
+---
+
+## Important Notes
+- **Security:**  
+  Never expose `PHONEPE_SALT_KEY` or other sensitive variables to the client/browser. Keep them strictly on the server side.  
+- **Environment:**  
+  Use sandbox API URLs and credentials for development and testing. Switch to production URLs and live credentials before deployment.  
+- **Version Control:**  
+  Add your environment file (e.g., `.env.local`) to `.gitignore` to avoid leaking secrets in your repository.
+
+---
+
+For more details, refer to the official [PhonePe developer documentation](https://developer.phonepe.com/).
